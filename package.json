@@ -12,7 +12,8 @@
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "buildOSX": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=icons/icon.icns --prune=true --out=release-builds"
+    "buildOSX": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=icons/icon.icns --prune=true --out=release-builds",
+    "buildLinux": "electron-packager . --overwrite --platform=linux --arch=x64 --icon=icons/icon.icns --prune=true --out=release-builds"
   },
   "author": "Fang Han",
   "license": "ISC",
