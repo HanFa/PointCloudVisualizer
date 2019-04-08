@@ -1,11 +1,18 @@
 {
   "name": "point-cloud-visualizer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Front end that visualizes .pcd files",
   "main": "main.js",
+  "build": {
+    "files": [
+      "config/*",
+      "static/*"
+    ]
+  },
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "buildOSX": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=icons/icon.icns --prune=true --out=release-builds"
   },
   "author": "Fang Han",
   "license": "ISC",
@@ -14,5 +21,8 @@
     "electron": "^4.1.1",
     "three": "^0.102.1",
     "three-orbit-controls": "^82.1.0"
+  },
+  "devDependencies": {
+    "electron-packager": "^13.1.1"
   }
 }

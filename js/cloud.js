@@ -70,6 +70,8 @@ THREE.PCDLoader.prototype = {
             PCDheader.str = PCDheader.str.replace( /\#.*/gi, '' );
 
             // parse
+            require('electron').remote.getGlobal('shareObj').headers = PCDheader.str;
+            console.log("Hello " + PCDheader.str);
             PCDheader.version = /VERSION (.*)/i.exec( PCDheader.str );
             PCDheader.fields = /FIELDS (.*)/i.exec( PCDheader.str );
             PCDheader.size = /SIZE (.*)/i.exec( PCDheader.str );
@@ -287,6 +289,8 @@ const plotCloud = (mesh) => {
         renderer.render( scene, camera );
     }
     animate();
+
+    display_panels();
 };
 
 let loader = new THREE.PCDLoader();
@@ -295,4 +299,5 @@ loader.load(filepath,
         dialog.showErrorBox('PCDLoader Error', error.toString());
         console.log(error.toString());
     });
+
 

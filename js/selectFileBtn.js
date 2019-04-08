@@ -1,8 +1,7 @@
 const {dialog, BrowserWindow} = require('electron').remote;
 const path = require('path');
 
-
-document.querySelector('#selectBtn').addEventListener('click', () => {
+const open_pcd_file = () => {
     dialog.showOpenDialog(null, {
         properties: ['openFile', 'createDirectory']
     }, (files) => {
@@ -11,10 +10,10 @@ document.querySelector('#selectBtn').addEventListener('click', () => {
         extension = filename.split('.').pop();
         var isValid = extension === 'pcd';
         document.getElementById('filePath').setAttribute('color', isValid ? 'green' : 'red');
-        document.getElementById('filePath').innerHTML =  filename;
+        document.getElementById('filePath').innerHTML = filename;
 
         if (isValid) {
-            let win = new BrowserWindow({ fullscreen : false, frame : false, title : "3D Cloud", width : 1200, height : 900 });
+            let win = new BrowserWindow({fullscreen: false, frame: false, title: "3D Cloud", width: 1200, height: 900});
             win.loadFile('cloud.html');
         } else {
             dialog.showErrorBox('Invalid extension ' + extension, "Only .pcd extension is supported!");
@@ -24,5 +23,7 @@ document.querySelector('#selectBtn').addEventListener('click', () => {
         require('electron').remote.getGlobal('shareObj').filepath = filepath;
         require('electron').remote.getGlobal('shareObj').extension = extension;
     });
-});
+}
+
+document.querySelector('#selectBtn').addEventListener('click', open_pcd_file);
 

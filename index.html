@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
-  <link href="https://unpkg.com/primer/build/build.css" rel="stylesheet">
   <head>
+    <style>
+      img {
+        border-radius: 10%;
+      }
+    </style>
     <meta charset="UTF-8">
     <title>Point Cloud Visualizer </title>
   </head>
@@ -9,6 +13,9 @@
     <h1> Point Cloud Visualizer </h1>
     <p> Version: <script src="js/version.js"> </script>
     <p> Select .pcd file: <button id="selectBtn"> Choose a PCD File </button> <font id='filePath'></font> </p>
+    <div>
+      <img src="static/sample.png" width="500"/>
+    </div>
     <script src="js/selectFileBtn.js"></script>
   </body>
 

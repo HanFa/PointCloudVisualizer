@@ -5,3 +5,8 @@ npm-debug.log
 # IDE
 .idea
 .vscode
+
+# Build
+release-builds
+
+.DS_Store

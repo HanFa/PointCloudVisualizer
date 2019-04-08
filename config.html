@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title> Preference Settings </title>
+</head>
+<body>
+<h1> Point Cloud Visualizer Preference Settings </h1>
+<div> Camera Up Direction:
+    x <input type="text" id="cameraUpX">
+    y <input type="text" id="cameraUpY">
+    z <input type="text" id="cameraUpZ">
+</div>
+<div>
+    Point Size: <input type="range" min="1" max="1000" value="50" id="pointSizeBar">
+    <span id="pointSizeBox"> </span>
+</div>
+<div>
+    Point Colors:
+    <div id="pointsColors">
+
+    </div>
+</div>
+
+
+
+<div>
+        <input type="button" id="cameraUpUpdate" value="Apply">
+</div>
+<script src="js/color_convert.js"></script>
+<script src="js/config_display.js"></script>
+</body>
+
+
+</html>
