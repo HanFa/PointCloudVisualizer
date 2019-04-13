@@ -1,4 +1,5 @@
 const {dialog, BrowserWindow} = require('electron').remote;
+const remote = require("electron").remote;
 const path = require('path');
 
 const open_pcd_file = () => {
@@ -19,11 +20,18 @@ const open_pcd_file = () => {
             dialog.showErrorBox('Invalid extension ' + extension, "Only .pcd extension is supported!");
         }
 
-        require('electron').remote.getGlobal('shareObj').filename = filename;
-        require('electron').remote.getGlobal('shareObj').filepath = filepath;
-        require('electron').remote.getGlobal('shareObj').extension = extension;
+        remote.getGlobal('shareObj').filename = filename;
+        remote.getGlobal('shareObj').filepath = filepath;
+        remote.getGlobal('shareObj').extension = extension;
     });
-}
+};
+
+const create_window = (template) => {
+    // Create the browser window.
+    let win = new remote.BrowserWindow({ fullscreen : false, resizable : true });
+    // and load the index.html of the app.
+    win.loadFile(template);
+};
 
 document.querySelector('#selectBtn').addEventListener('click', open_pcd_file);
-
+document.querySelector('#preferenceBtn').onclick = () => {create_window("config.html");};

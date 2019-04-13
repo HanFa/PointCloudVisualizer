@@ -1,10 +1,10 @@
 const { app, BrowserWindow, Menu } = require('electron');
 
 const create_window = (template) => {
-  // Create the browser window.
-  let win = new BrowserWindow({ fullscreen : false, resizable : true });
-  // and load the index.html of the app.
-  win.loadFile(template);
+    // Create the browser window.
+    let win = new BrowserWindow({ fullscreen : false, resizable : true });
+    // and load the index.html of the app.
+    win.loadFile(template);
 };
 
 
@@ -30,6 +30,6 @@ Menu.setApplicationMenu(menu);
 global.shareObj = {filename : null, filepath : null, extension : null, headers : null };
 app.on('ready', () => {create_window("index.html");});
 app.on('close', () => {
-  app.quit();
+    app.quit();
 });
 
