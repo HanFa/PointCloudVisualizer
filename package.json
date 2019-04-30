@@ -1,6 +1,6 @@
 {
   "name": "point-cloud-visualizer",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Front end that visualizes .pcd files",
   "main": "main.js",
   "build": {
@@ -20,6 +20,8 @@
   "dependencies": {
     "@primer/css": "^12.2.1",
     "electron": "^4.1.1",
+    "jquery": "^3.4.0",
+    "jquery-ui": "^1.12.1",
     "three": "^0.102.1",
     "three-orbit-controls": "^82.1.0"
   },

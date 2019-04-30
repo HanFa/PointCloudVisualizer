@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 
 const create_window = (template) => {
     // Create the browser window.
@@ -27,8 +27,30 @@ menu_template = [
 const menu = Menu.buildFromTemplate(menu_template);
 Menu.setApplicationMenu(menu);
 
-global.shareObj = {filename : null, filepath : null, extension : null, headers : null };
-app.on('ready', () => {create_window("index.html");});
+const initGlobalShareObj = (event, arg) => {
+    global.shareObj = {
+        filenames : null,
+        filepaths : null,
+        extensions : null,
+    };
+};
+
+const setGlobalShareObj = (event, data) => {
+    global.shareObj = data;
+};
+
+
+initGlobalShareObj();
+setGlobalShareObj();
+
+ipcMain.on('init-global-share-object', initGlobalShareObj);
+ipcMain.on('set-global-share-object', setGlobalShareObj);
+
+
+app.on('ready', () => {
+    create_window("index.html");
+});
+
 app.on('close', () => {
     app.quit();
 });

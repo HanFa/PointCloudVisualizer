@@ -1,10 +1,12 @@
 const {dialog} = require("electron").remote;
 const {remote} = require('electron');
+const config_json = require("./config/label_settings");
+const $ = require('jquery');
 
 document.getElementById('title').innerText = "Cloud Visualization for "
-    + remote.getGlobal('shareObj').filename;
+    + remote.getGlobal('shareObj').filenames;
 
-let filepath = remote.getGlobal('shareObj').filepath;
+let filepaths = remote.getGlobal('shareObj').filepaths;
 
 /**
  * @author Filipe Caixeta / http://filipecaixeta.com.br
@@ -20,6 +22,8 @@ const THREE = require('three');
 const OrbitControls = require('three-orbit-controls')(THREE);
 const cloudSettings = require('./config/label_settings');
 
+const PCDHeaders = []
+
 THREE.PCDLoader = function ( manager ) {
     this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
     this.littleEndian = true;
@@ -30,25 +34,23 @@ THREE.PCDLoader.prototype = {
 
     constructor: THREE.PCDLoader,
 
-    load: function ( url, onLoad, onProgress, onError ) {
+    load: function ( urls, onLoad, onProgress, onError ) {
 
         var scope = this;
-
+        var meshes = [];
         var loader = new THREE.FileLoader( scope.manager );
-        loader.setPath( scope.path );
-        loader.setResponseType( 'arraybuffer' );
-        loader.load( url, function ( data ) {
+        loader.setPath(scope.path);
+        loader.setResponseType('arraybuffer');
 
-            try {
-                onLoad( scope.parse( data, url ) );
-            } catch ( e ) {
-                if ( onError ) {
-                    onError( e );
-                } else {
-                    throw e;
-                }
-            }
-        }, onProgress, onError );
+        for (urlIdx in urls) {
+            var url = urls[urlIdx];
+            loader.load(url, (data) => {
+                    meshes.push(scope.parse(data, url));
+                    if (meshes.length === urls.length)
+                        onLoad(meshes);
+                },
+                onProgress, onError);
+        }
     },
 
     setPath: function ( value ) {
@@ -70,8 +72,7 @@ THREE.PCDLoader.prototype = {
             PCDheader.str = PCDheader.str.replace( /\#.*/gi, '' );
 
             // parse
-            require('electron').remote.getGlobal('shareObj').headers = PCDheader.str;
-            console.log("Hello " + PCDheader.str);
+            PCDHeaders.push(PCDheader.str);
             PCDheader.version = /VERSION (.*)/i.exec( PCDheader.str );
             PCDheader.fields = /FIELDS (.*)/i.exec( PCDheader.str );
             PCDheader.size = /SIZE (.*)/i.exec( PCDheader.str );
@@ -258,7 +259,39 @@ THREE.PCDLoader.prototype = {
     }
 };
 
-const plotCloud = (mesh) => {
+const display_panels = (activeIdx) => {
+
+    $(".label-panel").empty();
+    $("#path-panel").empty();
+    $("#field-panel").empty();
+
+    var div = document.createElement('a');
+    var node = document.createTextNode("Point Labels: ");
+    div.appendChild(node);
+    document.getElementsByClassName("label-panel")[0].appendChild(div);
+
+    label_elements = [];
+    let share_obj = require('electron').remote.getGlobal('shareObj');
+
+    const path_panel = document.querySelector("#path-panel");
+    path_panel.appendChild(document.createTextNode(share_obj.filenames[activeIdx]));
+
+    const field_panel = document.querySelector("#field-panel");
+    field_panel.appendChild(document.createTextNode(PCDHeaders[activeIdx]));
+
+    Object.keys(config_json.points.color).forEach((key) => {
+        var div = document.createElement('a');
+        var node = document.createTextNode(key);
+        div.appendChild(node);
+        div.style.backgroundColor = rgb_to_html_color(config_json.points.color[key]);
+        document.getElementsByClassName("label-panel")[0].appendChild(div);
+        label_elements.push(div);
+    });
+};
+
+
+
+const plotClouds = (meshes) => {
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera();
     camera.up.set(... cloudSettings.camera.up);
@@ -273,31 +306,47 @@ const plotCloud = (mesh) => {
     controls.enableKeys = true;
     controls.keyPanSpeed = 20.0;
     document.body.appendChild( renderer.domElement );
-    controls.update();
 
     // show axis
     var axesHelper = new THREE.AxesHelper(5);
     scene.add( axesHelper );
 
     // show cloud
-    scene.add(mesh);
-
+    meshes.forEach((mesh, idx) => {
+        mesh.visible = (idx === 0);
+        scene.add(mesh);
+    });
 
     function animate() {
-        requestAnimationFrame( animate );
         controls.update();
         renderer.render( scene, camera );
+        requestAnimationFrame( animate );
     }
     animate();
 
-    display_panels();
+    display_panels(0);
+
+    var slider = $("#cloudRange");
+    slider.attr("value", 0);
+    slider.attr("max", meshes.length - 1);
+    slider.on("input", (event) => {
+        let activeIdx = parseInt(event.target.value);
+        meshes.forEach((mesh, idx) => {
+            if (activeIdx === idx) {
+                mesh.visible = true;
+                display_panels(activeIdx);
+            } else
+                mesh.visible = false;
+        })
+    });
+
 };
 
 let loader = new THREE.PCDLoader();
-loader.load(filepath,
-    plotCloud, null, (error) => {
+loader.load(
+    filepaths,
+    plotClouds, null, (error) => {
         dialog.showErrorBox('PCDLoader Error', error.toString());
         console.log(error.toString());
     });
-
 
