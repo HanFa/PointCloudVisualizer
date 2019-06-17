@@ -133,7 +133,7 @@ THREE.PCDLoader.prototype = {
                     PCDheader.offset[ PCDheader.fields[ i ] ] = i;
                 } else {
                     PCDheader.offset[ PCDheader.fields[ i ] ] = sizeSum;
-                    sizeSum += PCDheader.size[ i ];
+                    sizeSum += PCDheader.size[ i ] * PCDheader.count[ i ];
                 }
             }
 
@@ -213,9 +213,21 @@ THREE.PCDLoader.prototype = {
             var offset = PCDheader.offset;
             for ( var i = 0, row = 0; i < PCDheader.points; i ++, row += PCDheader.rowSize ) {
                 if ( offset.x !== undefined ) {
-                    position.push( dataview.getFloat32( row + offset.x, this.littleEndian ) );
-                    position.push( dataview.getFloat32( row + offset.y, this.littleEndian ) );
-                    position.push( dataview.getFloat32( row + offset.z, this.littleEndian ) );
+
+                    var x = dataview.getFloat32( row + offset.x, this.littleEndian );
+                    var y = dataview.getFloat32( row + offset.y, this.littleEndian );
+                    var z = dataview.getFloat32( row + offset.z, this.littleEndian );
+
+                    position.push(... [x, y, z]);
+
+
+                    console.log(dataview.getFloat32(row + offset.x, this.littleEndian),
+                        dataview.getFloat32(row + offset.y, this.littleEndian),
+                        dataview.getFloat32(row + offset.z, this.littleEndian),
+                        dataview.getUint8(row + 12, this.littleEndian),
+                        dataview.getFloat32(row + 13, this.littleEndian),
+                        "ring:" + dataview.getInt16(row + 17, this.littleEndian),
+                        dataview.getUint8(row + 19, this.littleEndian));
                 }
 
                 if ( offset.rgb !== undefined ) {

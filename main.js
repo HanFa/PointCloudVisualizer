@@ -45,7 +45,8 @@ setGlobalShareObj();
 
 ipcMain.on('init-global-share-object', initGlobalShareObj);
 ipcMain.on('set-global-share-object', setGlobalShareObj);
-
+ipcMain.on('open-config', () => {create_window("config.html")});
+ipcMain.on('quit-app', () => {app.quit();});
 
 app.on('ready', () => {
     create_window("index.html");

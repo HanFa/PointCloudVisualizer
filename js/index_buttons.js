@@ -51,3 +51,6 @@ const openPCDFiles = () => {
 };
 
 $("#selectBtn").click(openPCDFiles);
+$("#preferenceBtn").click(() => {
+    ipcRenderer.send('open-config');
+});

@@ -1,6 +1,6 @@
 {
   "name": "point-cloud-visualizer",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Front end that visualizes .pcd files",
   "main": "main.js",
   "build": {
