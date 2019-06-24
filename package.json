@@ -12,6 +12,7 @@
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "buildWin" : "electron-packager .  --overwrite --platform=win32 --arch=x64 --prune=true --out=release-builds",
     "buildOSX": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=icons/icon.icns --prune=true --out=release-builds",
     "buildLinux": "electron-packager . --overwrite --platform=linux --arch=x64 --icon=icons/icon.icns --prune=true --out=release-builds"
   },

@@ -168,15 +168,15 @@ THREE.PCDLoader.prototype = {
                 }
 
                 if ( offset.label !== undefined ) {
-                    if (line[offset.label] === '0')
+                    if (line[offset.label].trim() === '0')
                         color.push(... cloudSettings.points.color.zero);
-                    else if (line[offset.label] === '1')
+                    else if (line[offset.label].trim() === '1')
                         color.push(... cloudSettings.points.color.one);
-                    else if (line[offset.label] === '2')
+                    else if (line[offset.label].trim() === '2')
                         color.push(... cloudSettings.points.color.two);
-                    else if (line[offset.label] === '3')
+                    else if (line[offset.label].trim() === '3')
                         color.push(... cloudSettings.points.color.three);
-                    else if (line[offset.label] === '4')
+                    else if (line[offset.label].trim() === '4')
                         color.push(... cloudSettings.points.color.four);
                     else
                         color.push(... cloudSettings.points.color.other);
