@@ -20,7 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@primer/css": "^12.2.1",
-    "electron": "^4.1.1",
+    "electron": "^7.2.4",
     "jquery": "^3.5.0",
     "jquery-ui": "^1.12.1",
     "three": "^0.102.1",
