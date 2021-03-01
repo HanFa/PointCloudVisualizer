@@ -23,7 +23,7 @@
     "electron": "^4.1.1",
     "jquery": "^3.5.0",
     "jquery-ui": "^1.12.1",
-    "three": "^0.102.1",
+    "three": "^0.125.0",
     "three-orbit-controls": "^82.1.0"
   },
   "devDependencies": {
